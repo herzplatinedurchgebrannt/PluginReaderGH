@@ -71,21 +71,26 @@ namespace PluginReaderVS
                 try
                 {
                     string[] pathRootVST = Directory.GetFiles(fbd.SelectedPath.ToString(), "*.dll");
-
+                    
                     if (pathRootVST.Length > 0)
                     {
+                        int x = 0;
+                        string nameOnly = "";
+                        string pathOnly = "";
+
                         foreach (string vst in pathRootVST)
                         {
+                            nameOnly = Path.GetFileName(pathRootVST[x]);
+                            pathOnly = pathRootVST[x].Replace(nameOnly, "");
+
                             pluginPositions.Add(new VSTPlugin()
                             {
-                                name = "hall0",
-                                type = "irgendwas",
-                                path = "hei und lo",
+                                name = nameOnly,
+                                path = pathOnly,
+                                type = "dll",
                             });
+                            x = x + 1;
                         }
-
-
-
                     }
                 }
                 catch
