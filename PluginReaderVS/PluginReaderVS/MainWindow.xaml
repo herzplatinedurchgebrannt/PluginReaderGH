@@ -10,8 +10,31 @@
         <local:BrowsePlugins/>
     </Window.DataContext>
 
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition MaxHeight="500" MinHeight="250"/>
+            <RowDefinition Height ="50"/>
 
-        <Grid>
-        <Button Width="200" Height="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50" Content=":-)" Command="{Binding browseCommand}"/>
+        </Grid.RowDefinitions>
+        <Button Grid.Row="1" Grid.Column="0" Width="200" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50" Content=":-)" Command="{Binding browseCommand}"/>
+        <ListView x:Name="plugins" ItemsSource="{Binding pluginPositions}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Right" Height="209" Width="463" Background="Aqua" ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding name}"/>
+                    <GridViewColumn Header="Typ" DisplayMemberBinding="{Binding type}"/>
+                    <GridViewColumn Header="Pfad" DisplayMemberBinding="{Binding path}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+                  
+                  
+
+
+
     </Grid>
 </Window>
