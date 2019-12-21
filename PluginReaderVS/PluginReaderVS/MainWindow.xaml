@@ -6,7 +6,12 @@
         xmlns:local="clr-namespace:PluginReaderVS"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Window.DataContext>
+        <local:BrowsePlugins/>
+    </Window.DataContext>
+
+
+        <Grid>
+        <Button Width="200" Height="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50" Content=":-)" Command="{Binding browseCommand}"/>
     </Grid>
 </Window>
