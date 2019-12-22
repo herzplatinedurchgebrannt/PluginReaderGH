@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml;
 using delegateCommand.Model;
 using Ookii.Dialogs.Wpf;
 
@@ -19,6 +20,7 @@ namespace PluginReaderVS
         public BrowsePlugins()
         {
             this.pluginPositions = new ObservableCollection<VSTPlugin>();
+            this.pathPositions = new ObservableCollection<PathPlugin>();
         }
 
 
@@ -37,7 +39,19 @@ namespace PluginReaderVS
         }
 
 
-
+        private ObservableCollection<PathPlugin> _pathPositions;
+        public ObservableCollection<PathPlugin> pathPositions
+        {
+            get { return _pathPositions; }
+            set
+            {
+                if (value != _pathPositions)
+                {
+                    _pathPositions = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
 
 
@@ -102,6 +116,110 @@ namespace PluginReaderVS
 
 
         }
+
+
+
+        private DelegateCommand _xmlWriteCommand;
+        public DelegateCommand xmlWriteCommand
+        {
+            get
+            {
+                if (_xmlWriteCommand == null)
+                {
+                    _xmlWriteCommand = new DelegateCommand(wmlWrite,
+
+                        () =>
+                        {
+                            return true;
+                        }
+                        );
+                }
+                return _xmlWriteCommand;
+            }
+        }
+
+        void wmlWrite()
+        {
+            string filename = @"D:\99_test\VSTPlugins.xml";
+
+            XmlTextWriter xmlWriter = new XmlTextWriter(filename, System.Text.Encoding.UTF8);
+
+            xmlWriter.Formatting = Formatting.Indented;
+
+            xmlWriter.WriteStartDocument();
+
+            xmlWriter.WriteComment("Founded VST-Plugins. File created: "+ DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"));
+
+            xmlWriter.WriteStartElement("VstPlugins");
+
+            for (int i = 0; i <= pluginPositions.Count() - 1; i++)
+            {
+                xmlWriter.WriteStartElement("Plugin");
+
+                xmlWriter.WriteElementString("name", pluginPositions[i].name);
+
+                xmlWriter.WriteElementString("type", pluginPositions[i].type);
+
+                xmlWriter.WriteElementString("path", pluginPositions[i].path);
+
+                xmlWriter.WriteEndElement();
+
+            }
+
+            xmlWriter.WriteEndElement();
+            xmlWriter.WriteEndDocument();
+            xmlWriter.Flush();
+            xmlWriter.Close();
+
+        }
+
+
+
+        private DelegateCommand _xmlReadCommand;
+        public DelegateCommand xmlReadCommand
+        {
+            get
+            {
+                if (_xmlReadCommand == null)
+                {
+                    _xmlReadCommand = new DelegateCommand(xmlRead,
+
+                        () =>
+                        {
+                            return true;
+                        }
+                        );
+                }
+                return _xmlReadCommand;
+            }
+        }
+
+        void xmlRead()
+        {
+
+            string testpath = @"D:\\99_test\\read.xml";
+
+            XmlTextReader xtr = new XmlTextReader(testpath);
+
+            while(xtr.Read())
+            {
+                if (xtr.NodeType == XmlNodeType.Element && xtr.Name == "path")
+                {
+                    pathPositions.Add(new PathPlugin()
+                    {
+                        path = xtr.ReadElementContentAsString()
+                    });
+                }
+
+            }
+
+
+        }
+
+        
+
+
+
 
 
         #region INotifyPropertyChanged Members
