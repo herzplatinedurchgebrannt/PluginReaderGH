@@ -174,6 +174,33 @@ namespace PluginReaderVS
         }
 
 
+        private DelegateCommand _clearPluginPositionsCommand;
+        public DelegateCommand clearPluginPositionsCommand
+        {
+            get
+            {
+                if (_clearPluginPositionsCommand == null)
+                {
+                    _clearPluginPositionsCommand = new DelegateCommand(clearPluginPositions,
+
+                        () =>
+                        {
+                            return true;
+                        }
+                        );
+                }
+                return _clearPluginPositionsCommand;
+            }
+        }
+
+        void clearPluginPositions()
+        {
+            pluginPositions.Clear();
+        }
+
+
+
+
 
         private DelegateCommand _xmlReadCommand;
         public DelegateCommand xmlReadCommand
