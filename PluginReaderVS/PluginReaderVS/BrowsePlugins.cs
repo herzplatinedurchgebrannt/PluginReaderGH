@@ -74,7 +74,6 @@ namespace PluginReaderVS
             }
         }
 
-
         void browsePlugins()
         {
             Ookii.Dialogs.Wpf.VistaFolderBrowserDialog fbd = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
@@ -315,6 +314,75 @@ namespace PluginReaderVS
                     {
                         MessageBox.Show("Fehler catch");
                     }
+                }
+            }
+        }
+
+
+
+
+
+        private DelegateCommand _browsePathPluginsCommand;
+        public DelegateCommand browsePathPluginsCommand
+        {
+            get
+            {
+                if (_browsePathPluginsCommand == null)
+                {
+                    _browsePathPluginsCommand = new DelegateCommand(browsePathPlugins,
+
+                        () =>
+                        {
+                            return true;
+                        }
+                        );
+                }
+                return _browsePathPluginsCommand;
+            }
+        }
+
+        void browsePathPlugins()
+        {
+            if (pathPositions.Count > 0)
+            {
+                try
+                {
+                    foreach (PathPlugin p in pathPositions)
+                    {
+                        string hallo = p.path;
+
+                        string[] pathRootVST = Directory.GetFiles(p.path, "*.dll");
+
+                        if (pathRootVST.Length > 0)
+                        {
+                            int x = 0;
+                            string nameOnly = "";
+                            string pathOnly = "";
+
+                            foreach (string vst in pathRootVST)
+                            {
+                                nameOnly = Path.GetFileName(pathRootVST[x]);
+                                pathOnly = pathRootVST[x].Replace(nameOnly, "");
+
+                                pluginPositions.Add(new VSTPlugin()
+                                {
+                                    name = nameOnly,
+                                    path = pathOnly,
+                                    type = "dll",
+                                });
+                                x = x + 1;
+                            }
+
+
+
+                        }
+
+
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Fehler catch");
                 }
             }
         }
