@@ -19,13 +19,14 @@
             <RowDefinition Height="30"/>
             <RowDefinition MaxHeight="300" MinHeight="250"/>
             <RowDefinition Height ="20"/>
-            <RowDefinition Height ="100"/>
-
+            <RowDefinition Height ="200"/>
         </Grid.RowDefinitions>
         <Button Grid.Row="1" Grid.Column="0" Width="100" Height="50" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="30" Content="Browse plugins" Command="{Binding browseCommand}"/>
         <Button Grid.Row="1" Grid.Column="0" Width="100" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30" Content="Write xml" Command="{Binding xmlWriteCommand}"/>
         <Button Grid.Row="1" Grid.Column="0" Width="100" Height="50" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="30" Content="Clear" Command="{Binding clearPluginPositionsCommand}"/>
-        <Button Grid.Row="3" Grid.Column="0" Width="100" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"  Content="Read xml" Command="{Binding xmlReadCommand}"/>
+        <Button Grid.Row="3" Grid.Column="0" Width="100" Height="50" HorizontalAlignment="Center" VerticalAlignment="Top"  Content="Read xml" Command="{Binding xmlPathReadCommand}"/>
+        <Button Grid.Row="3" Grid.Column="0" Width="100" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"  Content="Save xml" Command="{Binding xmlPathSaveCommand}"/>
+        <Button Grid.Row="3" Grid.Column="0" Width="100" Height="50" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Content="Browse plugins" Command="{Binding browsePathPluginsCommand}"/>
         <ListView x:Name="plugins" ItemsSource="{Binding pluginPositions}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Right" Height="Auto" MinWidth="500" Width="Auto" Background="LightGray"  ScrollViewer.VerticalScrollBarVisibility="Visible">
             <ListView.View>
                 <GridView>
@@ -37,7 +38,7 @@
         </ListView>
 
 
-        <ListView x:Name="paths" ItemsSource="{Binding pathPositions}" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" Height="100" MinWidth="500" Width="Auto" Background="LightGray"  ScrollViewer.VerticalScrollBarVisibility="Visible">
+        <ListView x:Name="paths" ItemsSource="{Binding pathPositions}" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" Height="150" MinWidth="500" Width="Auto" Background="LightGray"  ScrollViewer.VerticalScrollBarVisibility="Visible">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Pfad" DisplayMemberBinding="{Binding path}" Width="250"/>

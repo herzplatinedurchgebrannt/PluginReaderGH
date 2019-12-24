@@ -112,12 +112,7 @@ namespace PluginReaderVS
                     MessageBox.Show("Fehler catch");
                 }
             }
-
-
-
         }
-
-
 
         private DelegateCommand _xmlWriteCommand;
         public DelegateCommand xmlWriteCommand
@@ -126,7 +121,7 @@ namespace PluginReaderVS
             {
                 if (_xmlWriteCommand == null)
                 {
-                    _xmlWriteCommand = new DelegateCommand(wmlWrite,
+                    _xmlWriteCommand = new DelegateCommand(xmlWrite,
 
                         () =>
                         {
@@ -138,39 +133,54 @@ namespace PluginReaderVS
             }
         }
 
-        void wmlWrite()
+        void xmlWrite()
         {
-            string filename = @"D:\99_test\VSTPlugins.xml";
-
-            XmlTextWriter xmlWriter = new XmlTextWriter(filename, System.Text.Encoding.UTF8);
-
-            xmlWriter.Formatting = Formatting.Indented;
-
-            xmlWriter.WriteStartDocument();
-
-            xmlWriter.WriteComment("Founded VST-Plugins. File created: "+ DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"));
-
-            xmlWriter.WriteStartElement("VstPlugins");
-
-            for (int i = 0; i <= pluginPositions.Count() - 1; i++)
+            if (pluginPositions.Count > 0)
             {
-                xmlWriter.WriteStartElement("Plugin");
+                VistaSaveFileDialog vfb = new VistaSaveFileDialog();
 
-                xmlWriter.WriteElementString("name", pluginPositions[i].name);
+                Nullable<bool> dialogResult = vfb.ShowDialog();
 
-                xmlWriter.WriteElementString("type", pluginPositions[i].type);
+                if (dialogResult == true)
+                {
+                    try
+                    {
+                        //string filename = @"D:\99_test\VSTPlugins.xml";
 
-                xmlWriter.WriteElementString("path", pluginPositions[i].path);
+                        XmlTextWriter xmlWriter = new XmlTextWriter(vfb.FileName, System.Text.Encoding.UTF8);
 
-                xmlWriter.WriteEndElement();
+                        xmlWriter.Formatting = Formatting.Indented;
 
+                        xmlWriter.WriteStartDocument();
+
+                        xmlWriter.WriteComment("Founded VST-Plugins. File created: " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"));
+
+                        xmlWriter.WriteStartElement("VstPlugins");
+
+                        for (int i = 0; i <= pluginPositions.Count() - 1; i++)
+                        {
+                            xmlWriter.WriteStartElement("Plugin");
+
+                            xmlWriter.WriteElementString("name", pluginPositions[i].name);
+
+                            xmlWriter.WriteElementString("type", pluginPositions[i].type);
+
+                            xmlWriter.WriteElementString("path", pluginPositions[i].path);
+
+                            xmlWriter.WriteEndElement();
+
+                        }
+                        xmlWriter.WriteEndElement();
+                        xmlWriter.WriteEndDocument();
+                        xmlWriter.Flush();
+                        xmlWriter.Close();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Fehler catch");
+                    }
+                }
             }
-
-            xmlWriter.WriteEndElement();
-            xmlWriter.WriteEndDocument();
-            xmlWriter.Flush();
-            xmlWriter.Close();
-
         }
 
 
@@ -196,20 +206,17 @@ namespace PluginReaderVS
         void clearPluginPositions()
         {
             pluginPositions.Clear();
+            pathPositions.Clear();
         }
 
-
-
-
-
-        private DelegateCommand _xmlReadCommand;
-        public DelegateCommand xmlReadCommand
+        private DelegateCommand _xmlPathReadCommand;
+        public DelegateCommand xmlPathReadCommand
         {
             get
             {
-                if (_xmlReadCommand == null)
+                if (_xmlPathReadCommand == null)
                 {
-                    _xmlReadCommand = new DelegateCommand(xmlRead,
+                    _xmlPathReadCommand = new DelegateCommand(xmlRead,
 
                         () =>
                         {
@@ -217,33 +224,100 @@ namespace PluginReaderVS
                         }
                         );
                 }
-                return _xmlReadCommand;
+                return _xmlPathReadCommand;
             }
         }
 
         void xmlRead()
         {
+            VistaOpenFileDialog ofd = new VistaOpenFileDialog();
+            Nullable<bool> dialogResult = ofd.ShowDialog();
 
-            string testpath = @"D:\\99_test\\read.xml";
-
-            XmlTextReader xtr = new XmlTextReader(testpath);
-
-            while(xtr.Read())
+            if (dialogResult == true)
             {
-                if (xtr.NodeType == XmlNodeType.Element && xtr.Name == "path")
-                {
-                    pathPositions.Add(new PathPlugin()
+                try
+                { 
+                    XmlTextReader xtr = new XmlTextReader(ofd.FileName);
+
+                    while (xtr.Read())
                     {
-                        path = xtr.ReadElementContentAsString()
-                    });
+                        if (xtr.NodeType == XmlNodeType.Element && xtr.Name == "path")
+                        {
+                            pathPositions.Add(new PathPlugin()
+                            {
+                                path = xtr.ReadElementContentAsString()
+                            });
+                        }
+                    }
                 }
-
+                catch
+                {
+                    MessageBox.Show("Fehler catch");
+                }
             }
-
-
         }
 
-        
+        private DelegateCommand _xmlPathSaveCommand;
+        public DelegateCommand xmlPathSaveCommand
+        {
+            get
+            {
+                if (_xmlPathSaveCommand == null)
+                {
+                    _xmlPathSaveCommand = new DelegateCommand(xmlSave,
+
+                        () =>
+                        {
+                            return true;
+                        }
+                        );
+                }
+                return _xmlPathSaveCommand;
+            }
+        }
+
+        void xmlSave()
+        {
+            if (pathPositions.Count > 0)
+            {
+                VistaSaveFileDialog vfb2 = new VistaSaveFileDialog();
+                Nullable<bool> dialogResult = vfb2.ShowDialog();
+
+                if (dialogResult == true)
+                {
+                    try
+                    {
+                        XmlTextWriter xmlWriter = new XmlTextWriter(vfb2.FileName + ".xml", System.Text.Encoding.UTF8);
+
+                        xmlWriter.Formatting = Formatting.Indented;
+
+                        xmlWriter.WriteStartDocument();
+
+                        xmlWriter.WriteComment("Paths for VST-Plugins. File created: " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"));
+
+                        xmlWriter.WriteStartElement("PluginPath");
+
+                        for (int i = 0; i <= pathPositions.Count() - 1; i++)
+                        {
+                            xmlWriter.WriteStartElement("SystemPath");
+
+                            xmlWriter.WriteElementString("path", pathPositions[i].path);
+
+                            xmlWriter.WriteEndElement();
+
+                        }
+                        xmlWriter.WriteEndElement();
+                        xmlWriter.WriteEndDocument();
+                        xmlWriter.Flush();
+                        xmlWriter.Close();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Fehler catch");
+                    }
+                }
+            }
+        }
 
 
 
