@@ -38,7 +38,6 @@ namespace PluginReaderVS
             }
         }
 
-
         private ObservableCollection<PathPlugin> _pathPositions;
         public ObservableCollection<PathPlugin> pathPositions
         {
@@ -52,7 +51,6 @@ namespace PluginReaderVS
                 }
             }
         }
-
 
 
         private DelegateCommand _browseCommand;
@@ -73,7 +71,6 @@ namespace PluginReaderVS
                 return _browseCommand;
             }
         }
-
         void browsePlugins()
         {
             Ookii.Dialogs.Wpf.VistaFolderBrowserDialog fbd = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
@@ -113,6 +110,7 @@ namespace PluginReaderVS
             }
         }
 
+
         private DelegateCommand _xmlWriteCommand;
         public DelegateCommand xmlWriteCommand
         {
@@ -131,7 +129,6 @@ namespace PluginReaderVS
                 return _xmlWriteCommand;
             }
         }
-
         void xmlWrite()
         {
             if (pluginPositions.Count > 0)
@@ -146,7 +143,7 @@ namespace PluginReaderVS
                     {
                         //string filename = @"D:\99_test\VSTPlugins.xml";
 
-                        XmlTextWriter xmlWriter = new XmlTextWriter(vfb.FileName, System.Text.Encoding.UTF8);
+                        XmlTextWriter xmlWriter = new XmlTextWriter(vfb.FileName + ".xml", System.Text.Encoding.UTF8);
 
                         xmlWriter.Formatting = Formatting.Indented;
 
@@ -201,12 +198,12 @@ namespace PluginReaderVS
                 return _clearPluginPositionsCommand;
             }
         }
-
         void clearPluginPositions()
         {
             pluginPositions.Clear();
             pathPositions.Clear();
         }
+
 
         private DelegateCommand _xmlPathReadCommand;
         public DelegateCommand xmlPathReadCommand
@@ -226,7 +223,6 @@ namespace PluginReaderVS
                 return _xmlPathReadCommand;
             }
         }
-
         void xmlRead()
         {
             VistaOpenFileDialog ofd = new VistaOpenFileDialog();
@@ -256,6 +252,7 @@ namespace PluginReaderVS
             }
         }
 
+
         private DelegateCommand _xmlPathSaveCommand;
         public DelegateCommand xmlPathSaveCommand
         {
@@ -274,7 +271,6 @@ namespace PluginReaderVS
                 return _xmlPathSaveCommand;
             }
         }
-
         void xmlSave()
         {
             if (pathPositions.Count > 0)
@@ -319,9 +315,6 @@ namespace PluginReaderVS
         }
 
 
-
-
-
         private DelegateCommand _browsePathPluginsCommand;
         public DelegateCommand browsePathPluginsCommand
         {
@@ -340,7 +333,6 @@ namespace PluginReaderVS
                 return _browsePathPluginsCommand;
             }
         }
-
         void browsePathPlugins()
         {
             if (pathPositions.Count > 0)
@@ -372,12 +364,7 @@ namespace PluginReaderVS
                                 });
                                 x = x + 1;
                             }
-
-
-
                         }
-
-
                     }
                 }
                 catch
