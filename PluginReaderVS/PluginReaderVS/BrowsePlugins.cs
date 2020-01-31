@@ -16,6 +16,7 @@ namespace PluginReaderVS
 {
     class BrowsePlugins : INotifyPropertyChanged
     {
+        //Test
 
         public BrowsePlugins()
         {
